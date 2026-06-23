@@ -1,0 +1,54 @@
+What is LangChain?
+
+LangChain is an open-source framework for building applications powered by Large Language Models (LLMs) such as GPT, Claude, Gemini, Llama, and Mistral.
+
+Think of it this way:
+
+LLM (GPT, Claude, Gemini)
+          +
+External Data
+          +
+Memory
+          +
+Tools
+          +
+Workflow Logic
+          =
+LangChain Application
+
+An LLM alone can answer questions based on its training data.
+
+LangChain helps you build systems where the LLM can:
+
+Read documents
+Search databases
+Use APIs
+Call tools
+Remember conversations
+Retrieve enterprise knowledge (RAG)
+Execute complex workflows
+Why LangChain Was Created
+
+Suppose you ask GPT:
+
+"What is our company's latest travel policy?"
+
+GPT doesn't know your company's internal documents.
+
+You need:
+
+Company PDF
+      ↓
+Read PDF
+      ↓
+Convert to embeddings
+      ↓
+Store in Vector DB
+      ↓
+Retrieve relevant chunks
+      ↓
+Send to GPT
+      ↓
+Answer
+
+LangChain provides the building blocks for this entire pipeline.

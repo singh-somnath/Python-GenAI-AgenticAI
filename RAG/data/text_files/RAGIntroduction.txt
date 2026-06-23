@@ -1,0 +1,12 @@
+A-RAG is an advanced agentic RAG framework that allows AI models to autonomously control hierarchical information retrieval for more accurate and adaptive responses.
+Overview
+A-RAG (Agentic Retrieval-Augmented Generation) is an evolution of traditional RAG systems, designed to let AI models actively participate in the retrieval process rather than passively receiving pre-selected information 
+
+. Unlike standard RAG, which either retrieves documents in a single shot or follows a predefined workflow, A-RAG exposes hierarchical retrieval interfaces directly to the model, enabling dynamic decision-making during information gathering 
+
+Key Features
+Hierarchical Retrieval Tools: A-RAG provides three main tools—keyword search, semantic search, and chunk read—allowing the model to search and retrieve information at multiple granularities 
+
+Autonomous Decision-Making: The model iteratively decides which retrieval tool to use and when to stop searching, optimizing both accuracy and efficiency 
+
+Adaptive Context Integration: Retrieved information is combined with the user query to generate contextually accurate responses, reducing hallucinations common in traditional LLM outputs 
