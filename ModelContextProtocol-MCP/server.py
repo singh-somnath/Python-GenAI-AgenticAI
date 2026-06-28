@@ -64,7 +64,17 @@ def getTaskItem(name):
         return f"Task File : {name}"
     except Exception as e:
         raise e 
-    
+
+@mcp.prompt()
+def getAllTaskSummaryPrompt():
+    """This function will help to generate a summary report for all task items in the task manager.
+       Args - No Argument       
+    """
+    try:       
+        return """Generate a detailed Markdown summary report for all tasks in the Task Manager, 
+        including task statistics,  key insights, and recommendations."""
+    except Exception as e:
+        raise e
 
 if __name__ == "__main__":
      mcp.run(transport='stdio')
