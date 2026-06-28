@@ -68,3 +68,21 @@ def getTaskItem(name):
 
 if __name__ == "__main__":
      mcp.run(transport='stdio')
+
+
+
+"""
+mcp.json content:
+{
+  "servers": {
+    "task-manager": {
+      "type": "stdio",
+      "command": "F:\\Python-GenAI-AgenticAI\\ModelContextProtocol-MCP\\.venv\\Scripts\\python.exe",
+      "args": [
+        "server.py"
+      ],
+      "cwd": "F:\\Python-GenAI-AgenticAI\\ModelContextProtocol-MCP"
+    }
+  }
+}
+"""
