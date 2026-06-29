@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "task-manager": {
+      "command": "C:\\Users\\somnath.singh\\Python-GenAI-AgenticAI\\ModelContextProtocol-MCP\\.venv\\Scripts\\python.exe",
+      "args": [
+        "server.py"
+      ],
+      "cwd": "C:\\Users\\somnath.singh\\Python-GenAI-AgenticAI\\ModelContextProtocol-MCP"
+    }
+  }
+}

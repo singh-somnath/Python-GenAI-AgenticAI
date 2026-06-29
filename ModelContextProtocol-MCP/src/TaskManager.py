@@ -4,12 +4,10 @@ from datetime import datetime
 class Task:
     id:int
     title:str
-    descrition:str
-    
+    descrition:str   
 
-    def __init__(self,title,description,id=None):
-        taskMan = TaskManager()
-        self.id= id if id is not None else taskMan.getNextId()
+    def __init__(self,title,description,id):       
+        self.id= id
         self.title = title
         self.descrition = description
     
@@ -40,7 +38,7 @@ class TaskManager:
             raise ValueError("File not found - Not able to write - ", e)
           
     def addTask(self,title,description):      
-        newTask= Task(title,description)
+        newTask= Task(title,description,self.getNextId())
         self.taskList.append(newTask)
         self.fileWrite()
 
@@ -61,15 +59,18 @@ class TaskManager:
        except Exception as e:
            raise e
           
-    def listTask(self):
-        prTasks = {}
-        if len(self.taskList) <= 0:
-           raise ValueError("No data available")
-        
-        for task in self.taskList:
-            prTasks[task.id] = (f"Task ID : {task.id} | Title : {task.title} | Description : {task.descrition}")
-        
-        return prTasks
+    def listTask(self) -> str:
+        try:
+            prTasks = {}
+            if len(self.taskList) <= 0:
+               raise ValueError("No data available")
+            
+            for task in self.taskList:
+                prTasks[task.id] = (f"Task ID : {task.id} | Title : {task.title} | Description : {task.descrition}")
+            
+            return str(prTasks)
+        except Exception as e:
+            raise e
      
     
     def searchTask(self,searchTitle):       

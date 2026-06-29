@@ -1,1 +1,4 @@
 MCP[cli]
+langchain-openai
+python-dotenv
+mcp-use

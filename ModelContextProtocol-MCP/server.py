@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
 from src.TaskManager import TaskManager
+import json
 
 mcp = FastMCP("TaskMAnager")
 
@@ -44,13 +45,14 @@ def deleteTaskItem(index):
     
 
 @mcp.tool()
-def showAllTask():
+def showAllTask() -> str:
     """This function will help to reterieve all existing task items
        Args - No Argument           
     """
     try:
         taskMgr = TaskManager()
-        return taskMgr.listTask()
+        tasks =  taskMgr.listTask()
+        return str(tasks)
     except Exception as e:
         raise e
 
@@ -77,7 +79,7 @@ def getAllTaskSummaryPrompt():
         raise e
 
 if __name__ == "__main__":
-     mcp.run(transport='stdio')
+     mcp.run()
 
 
 
