@@ -5,7 +5,7 @@
 **/dist/**
 **/wheels/**
 **/*.egg-info/**
-**/.env/**
+**/.env
 
 # Virtual environments
 **/sharepointENV/**
