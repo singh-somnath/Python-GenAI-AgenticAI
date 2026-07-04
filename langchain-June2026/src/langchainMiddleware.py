@@ -32,6 +32,8 @@ from langchain.agents import create_agent
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain.agents.middleware import SummarizationMiddleware,HumanInTheLoopMiddleware
+from langgraph.types import Command
+from langchain_openai import ChatOpenAI 
 import os
 from dotenv import load_dotenv
 from rich import print
@@ -73,13 +75,65 @@ Pause agent execution for human approval, editing, or rejection of tool calls be
             -High-stakes operations requiring human approval (e.g. database writes, financial transactions).
             -Compliance workflows where human oversight is mandatory.
             -Long-running conversations where human feedback guides the agent.
+
+Key Points : 
+
+HumanInTheLoopMiddleware → Specifies which tools require approval.
+checkpointer → Required to pause and resume execution.
+create_agent() → Registers the model, tools, middleware, and checkpointer.
+thread_id → Identifies the execution thread for resuming.
+Command(resume=...) → Continues execution after the human decision. 
+    agent.invoke(Command(resume={"decisions":[{"type":user_input}]}),config=configuration)
+
 """
+
+def sendMail(emailId, subject, body):
+    """
+    This function is responsible for sending mail with subject, bosy and to the designate emailId
+    """ 
+    print(f"Sending email to: {emailId}\nSubject: {subject}\nBody: {body}")
+
+
 def agent_HumanInTheLoopMiddlewar():
     load_dotenv()
     os.getenv("OPENAI_API_KEY")
+
+    agent = create_agent(
+        model="gpt-4o-mini",
+        tools=[sendMail],
+        checkpointer=InMemorySaver(),
+        middleware=[
+            HumanInTheLoopMiddleware(
+                interrupt_on={
+                    "sendMail":{
+                        "allowed_decisions":["approve","edit","reject"]
+                    }
+                }
+            )
+        ]
+    )
+
+    configuration = {"configurable":{"thread_id":"thread_1"}}
+
+    result = agent.invoke(input={"messages":[HumanMessage("Send mail to ss@sg.com with subject - project status and body - All task completed")]}, config= configuration)
     
+    #Invalid Call - System will not allow
+    #result2 = agent.invoke(input={"messages":[HumanMessage("How gym works for body , how it different from homw workout")]}, config= configuration)
+   
+    if result[ '__interrupt__'] :
+         llm = ChatOpenAI(model="gpt-4o-mini")
+                
+         result_1 = llm.invoke({"messages":HumanMessage(f"context:{result[ '__interrupt__'][-1].value} \nExtract all allowed decision options and present them in a clear, structured format with max 3-4 lines, so the user understands what each option does and when to choose it.")})
+         print(result_1["messages"][-1].content)
+
+         user_input = input("\n User : " )
+
+         res = agent.invoke(Command(resume={"decisions":[{"type":user_input}]}),config=configuration)
+         print(res["messages"][-1].content)
+ 
+   
 
 
 
 if __name__ == "__main__":
-    agent_SummarizationMiddleware()
+    agent_HumanInTheLoopMiddlewar()
