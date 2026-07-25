@@ -52,7 +52,7 @@ def _stopWord():
 
     words = [ word for word in words if word not in set(stopwords.words("english"))]
 
-    print(' '.join(words))
+    print(words)
 
 if __name__ == "__main__":
     _stopWord()

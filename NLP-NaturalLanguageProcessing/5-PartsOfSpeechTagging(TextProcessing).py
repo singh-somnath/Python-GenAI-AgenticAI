@@ -2,7 +2,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import SnowballStemmer
 from nltk.corpus import stopwords
 import nltk
-nltk.download('averaged_perceptron_tagger_eng')
+#nltk.download('averaged_perceptron_tagger_eng')
 def _partOfSppech():
 
     paragraph = """
