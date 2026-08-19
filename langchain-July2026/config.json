@@ -1,0 +1,18 @@
+{
+    "provider":"openai",
+    "openai":{
+        "model":"gpt-4o-mini",
+        "temprature" : "0.5",
+        "max_token" : "3000"            
+    },
+     "gemini":{
+        "model":"gemini-3.6-flash",
+        "temprature" : "0.5",
+        "max_token" : "300"            
+    }, 
+    "groq":{
+        "model":"llama-3.3-70b-versatile",
+        "temprature" : "0.5",
+        "max_token" : "300"            
+    }
+}

@@ -1,0 +1,45 @@
+{
+"$schema": "https://json-schema.org/draft/2020-12/schema",
+"title": "Book",
+"type": "object",
+"properties": {
+"id": {
+"type": "integer",
+"description": "Unique book identifier"
+},
+"title": {
+"type": "string",
+"description": "Book title"
+},
+"author": {
+"type": "string",
+"description": "Author name"
+},
+"isbn": {
+"type": "string",
+"description": "ISBN number"
+},
+"publishedYear": {
+"type": "integer",
+"minimum": 1000,
+"maximum": 9999
+},
+"price": {
+"type": "number",
+"minimum": 0
+},
+"genre": {
+"type": "string"
+},
+"available": {
+"type": "boolean"
+}
+},
+"required": [
+"id",
+"title",
+"author",
+"isbn"
+],
+"additionalProperties": false
+}
