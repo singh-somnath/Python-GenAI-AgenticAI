@@ -1,5 +1,7 @@
 from src.NoMemory00 import chatAPP
 from src.BasicMemory import chatAPP
+from src.SummaryMemory import chatAPP
+from src.TokenBufferMemory import chatAPP
 
 def main():
     print("Hello from langchain-memory!")
