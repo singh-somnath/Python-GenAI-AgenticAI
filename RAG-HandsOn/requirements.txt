@@ -56,9 +56,9 @@ kubernetes==34.1.0
 langchain==1.2.6
 langchain-classic==1.0.0
 langchain-community==0.4
-langchain-core==1.2.7
+langchain-core>=0.3.0
+langchain-openai>=0.3.0
 langchain-google-genai==2.1.12
-langchain-openai==1.0.0
 langchain-text-splitters==1.0.0
 langgraph==1.0.6
 langgraph-checkpoint==2.1.2
@@ -146,3 +146,11 @@ xxhash==3.6.0
 yarl==1.22.0
 zipp==3.23.0
 zstandard==0.25.0
+pypdf
+beautifulsoup4
+unstructured
+langchain_chroma
+chromadb
+faiss-cpu
+sentence-transformers
+langchain

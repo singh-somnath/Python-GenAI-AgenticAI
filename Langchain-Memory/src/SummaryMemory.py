@@ -46,6 +46,7 @@ def get_sessionHistory(session_id):
         response = promptSummaryChain.invoke({"conversation":conversationMsg})
 
         store[session_id] = InMemoryChatMessageHistory()
+        store[session_id]
         store[session_id].add_ai_message(f"Conversation Summary : {response}")
         print("******************************************************")
         print(response)
@@ -71,6 +72,7 @@ def chatAPP():
         if userInput.lower() == "exit":
             break
 
+      
         response = mesageRunnable.invoke({"userMessage":userInput},config={"configurable":{"session_id":session_id}})
 
         print("Assistant:")
