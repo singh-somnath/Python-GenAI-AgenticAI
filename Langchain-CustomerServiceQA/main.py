@@ -4,13 +4,13 @@ from src.EvaluationCriteria import getEvaluationCriteria
 from src.Evaluation import runEvaluation
 from src.QAReport import finalReport
 from src.GetExcel import genrateExcel
+from src.GetInputFile import getInputFileDF
 
-
-if __name__ == "__main__":
-    #Load LLM and Data ---------------------------------------------------------------------
-    settings = getLLMandConfig()
+def getCustomerSupportQAReport(df,outputpath):
+     #Load LLM and Data ---------------------------------------------------------------------
+    settings = getLLMandConfig()    
     #CLASSIFICATION-----------------------------------------------------------------------------
-    df = applyBatchClassification(settings)
+    df = applyBatchClassification(df,settings)
     #EvaluationCriteria
     df = getEvaluationCriteria(df)
     #Evaluation
@@ -18,5 +18,10 @@ if __name__ == "__main__":
     #QAReport
     df = finalReport(df,settings)
     #Generate Excel --------------------------------------------------------------------------------
-    ex = genrateExcel(df)
-    print("Report Generated Successfully")
+    genrateExcel(df,outputpath)
+
+
+
+if __name__ == "__main__":
+    getCustomerSupportQAReport("data/transcripts.csv","data/output.xlsx")
+   

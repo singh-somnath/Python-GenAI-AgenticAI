@@ -35,11 +35,10 @@ def getClassificationChain(settings):
     classificationChain = promptClassification | llm | parserClassification
     return classificationChain
 
-def applyBatchClassification(settings):
+def applyBatchClassification(df,settings):
     #Batch Classification
     classificationChain = getClassificationChain(settings)
     results=[]
-    df = settings["df"]
     for i, row in tqdm(df.iterrows(),total=len(df),desc="Classifying Calls Type"):
         try:
             response = classificationChain.invoke({"transcript":row["transcript"]})

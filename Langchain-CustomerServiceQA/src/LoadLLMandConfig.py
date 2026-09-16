@@ -16,9 +16,7 @@ def getLLMandConfig():
         temperature=0.3
     )
 
-    df = pd.read_csv("data/transcripts.csv")
-
     with open("config/config.json","r") as f:
         config = json.load(f)
 
-    return {"llm":llm,"df":df,"config":config}
+    return {"llm":llm,"config":config}
