@@ -6,7 +6,7 @@ from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import os
 from langchain_core.runnables import RunnablePassthrough
-from src.reteriever import getReteriever
+
 
 load_dotenv()
 apiKEY = os.getenv("OPENAI_API_KEY")
@@ -55,7 +55,6 @@ def getMessageAndHistory(currentSessionStore):
          raise e
       
 
-
 def askLLM(userQuery:str, session_id : str):
     try:
         currentSessionStore = getSessionStore(session_id)
@@ -65,7 +64,7 @@ def askLLM(userQuery:str, session_id : str):
                 {
                     "memory": lambda _: message_history["messages"],
                     "history": lambda _: message_history["summary"],
-                    "context": lambda _: getReteriever().invoke(userQuery),
+                    "context": lambda _: "",
                     "query": RunnablePassthrough()
                 }
                 | prompt

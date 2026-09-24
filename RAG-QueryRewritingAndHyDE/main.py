@@ -1,10 +1,8 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from src.loader import getDocumentsChunks
-from src.reteriever import getReteriever, getQueryEmbedding
-from langchain_core.chat_history import InMemoryChatMessageHistory
-from src.llmResponse import askLLM
+from src.multiLevelReteriver import multiLevelReteriever
+#from src.llmResponse import askLLM
 
 def main():
     try:
@@ -19,8 +17,9 @@ def main():
             if inputQ.lower() == "exit":
                 break
 
-            print("Response : ")
-            print(askLLM(inputQ,"user-123"))
+            #print("Response : ")
+            #print(askLLM(inputQ,"user-123"))
+            multiLevelReteriever(inputQ)
 
         print("------------End--------------")
 

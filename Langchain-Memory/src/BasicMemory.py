@@ -15,15 +15,13 @@ base_llm = ChatOpenAI(
         api_key=openapikey
 )
 
-parser = StrOutputParser()
-
 prompt = ChatPromptTemplate.from_template(
     "You are an helping assistant. Please give naswer professioanlly\n"
     "Message History : {history}"
     "User Message : {input}"
 )
 
-promptChain = prompt | base_llm | parser
+promptChain = prompt | base_llm | StrOutputParser()
 
 store = {}
 

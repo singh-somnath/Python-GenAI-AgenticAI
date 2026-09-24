@@ -7,5 +7,19 @@ def main():
     print("Hello from langchain-memory!")
 
 
+a = lambda _ : "Hello"
+b = lambda x : "Hello" + x 
+
+n=['$1','$2','$56']
+
+n1 = list(map(lambda a : float(a.replace('$','')) , n ))
+
+
+
 if __name__ == "__main__":
-    chatAPP()
+    #chatAPP()
+    print("main--->")
+    print(a(9))
+    print(b("world"))
+    print(n1)
+

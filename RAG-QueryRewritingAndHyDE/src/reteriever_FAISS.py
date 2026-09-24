@@ -12,11 +12,13 @@ embeddingModel = OpenAIEmbeddings(model="text-embedding-3-small", api_key=apiKey
 
 def createReteriever(documentChunks):  
     try:
-        if not os.path.exists("./store/vectorDbFaissOpenAI"):
-            os.makedirs("./store/vectorDbFaissOpenAI")
         if not documentChunks:
              print("documentChunks required for FAISS")
              return ValueError("documentChunks required for FAISS")
+        
+        if not os.path.exists("./store/vectorDbFaissOpenAI"):
+                    os.makedirs("./store/vectorDbFaissOpenAI")
+        
         vDB =FAISS.from_documents(documentChunks,
                             embeddingModel,)
         
@@ -34,20 +36,15 @@ def loadReteriever():
     return vDB.as_retriever(search_kwargs={"k": 5})
 
 
-def getReteriever():
+def getFaissReteriever(chunks):
     try:
-        if not os.path.exists("./store/vectorDbFaissOpenAI"):
-            chunks = getDocumentsChunks()
-            return createReteriever(chunks)
+        if not os.path.exists("./store/vectorDbFaissOpenAI"):          
+            reteirever =  createReteriever(chunks)
+            return reteirever
         else:
-            return loadReteriever()
+             reteirever = loadReteriever()
+             return reteirever
     except Exception as e:
             print(e)
-
-def getQueryEmbedding(query:str):
-    try:
-        return embeddingModel.embed_query(query)
-    except Exception as e:
-        print(e)
 
 

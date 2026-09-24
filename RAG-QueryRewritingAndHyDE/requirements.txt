@@ -154,3 +154,4 @@ chromadb
 faiss-cpu
 sentence-transformers
 langchain
+rank_bm25
