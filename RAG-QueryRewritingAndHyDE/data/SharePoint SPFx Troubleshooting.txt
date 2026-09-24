@@ -1,0 +1,106 @@
+Document ID: SPFX-ERR-0427
+Title: SPFx Deployment Troubleshooting Guide
+Version: 3.7.2
+
+1. Error: AADSTS65001
+
+When an SPFx solution calls Microsoft Graph and returns error
+AADSTS65001, the application requires admin consent for the
+requested API permissions.
+
+Resolution:
+1. Open Microsoft Entra ID.
+2. Open App registrations.
+3. Select the application used by the SPFx solution.
+4. Open API permissions.
+5. Verify the required Microsoft Graph permissions.
+6. Grant admin consent.
+
+Important:
+AADSTS65001 is specifically associated with consent being required.
+Do not confuse it with AADSTS700016.
+
+------------------------------------------------------------
+
+2. Error: AADSTS700016
+
+AADSTS700016 indicates that the application identifier was not
+found in the directory.
+
+Common causes:
+- Incorrect client/application ID.
+- Application registered in a different tenant.
+- Incorrect tenant ID.
+- Application registration has been deleted.
+
+Resolution:
+Verify the tenant ID and application/client ID.
+
+Important:
+AADSTS700016 is different from AADSTS65001.
+AADSTS65001 concerns consent.
+AADSTS700016 concerns application identification.
+
+------------------------------------------------------------
+
+3. SPFx Permission Configuration
+
+The following configuration is required when an SPFx web part
+requests an API permission:
+
+webApiPermissionRequests
+
+Example:
+
+"webApiPermissionRequests": [
+  {
+    "resource": "Microsoft Graph",
+    "scope": "User.Read"
+  }
+]
+
+The resource and scope values must match the API permission
+requested by the solution.
+
+------------------------------------------------------------
+
+4. SharePoint Taxonomy Search
+
+A managed metadata column named Countries may appear as:
+
+Countries
+
+in the SharePoint list schema.
+
+The corresponding crawled property can be:
+
+owstaxIdCountries
+
+For search refinement, the crawled property may be mapped to:
+
+RefinableString00
+
+If the managed metadata field is changed, a re-index may be
+required before the updated values become available to search.
+
+------------------------------------------------------------
+
+5. SPFx Version-Specific Issue
+
+This document applies to SPFx version 1.18.2.
+
+In SPFx 1.18.2, the property:
+
+includeClientSideAssets
+
+can be configured in the package-solution.json configuration.
+
+Example:
+
+"includeClientSideAssets": false
+
+When this setting is false, client-side assets are expected to
+be hosted externally, such as on a CDN.
+
+Do not assume that this behavior is identical across all SPFx
+versions.

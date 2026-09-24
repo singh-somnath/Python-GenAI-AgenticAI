@@ -14,10 +14,15 @@ basellm = ChatOpenAI(model="gpt-4o-mini",api_key=apiKEY)
 
 store = {}
 prompt = ChatPromptTemplate.from_messages([
-                ("system", """You are a helpful assistant that answers questions based on the provided context.
+                ("system", """You are a RAG assistant.
+                    Answer the question ONLY using the provided context.
+                    If the answer is not present in the context, say:
+                    "I don't have enough information in the provided context.
+                    Do not use outside knowledge.
+
                     Use the following memory to guide your responses:
                     {memory}"""),
-                        ("human", """Chat History:
+                ("human", """Chat History:
                     {history}
 
                     Context:
@@ -35,20 +40,16 @@ def getSessionStore(session_id:str) -> InMemoryChatMessageHistory:
         return store[session_id]
 
 def getMessageAndHistory(currentSessionStore):
-    try:
-        messages = currentSessionStore.messages
+    try:      
 
-        if len(messages) > 5 :
-
-            
-            oldMessages = messages[:-5]
-            print(oldMessages)
+        if len(currentSessionStore.messages) > 5 :            
+            oldMessages = currentSessionStore.messages[:5]         
             summary = oldMessages
-            messages = messages[:5]
+            currentSessionStore.messages = currentSessionStore.messages[5:]
         else:
             summary = ""
 
-        return {"summary" : summary , "messages" : messages}
+        return {"summary" : summary , "messages" : currentSessionStore.messages}
     
     except Exception as e:
          print(e)
@@ -60,12 +61,13 @@ def askLLM(userQuery:str, session_id : str):
     try:
         currentSessionStore = getSessionStore(session_id)
         message_history = getMessageAndHistory(currentSessionStore)
+        currentContext = getReteriever().invoke(userQuery)
         
         ragChain = (
                 {
                     "memory": lambda _: message_history["messages"],
                     "history": lambda _: message_history["summary"],
-                    "context": lambda _: getReteriever().invoke(userQuery),
+                    "context": lambda _: currentContext,
                     "query": RunnablePassthrough()
                 }
                 | prompt

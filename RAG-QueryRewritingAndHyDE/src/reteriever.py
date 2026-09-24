@@ -44,10 +44,4 @@ def getReteriever():
     except Exception as e:
             print(e)
 
-def getQueryEmbedding(query:str):
-    try:
-        return embeddingModel.embed_query(query)
-    except Exception as e:
-        print(e)
-
 
