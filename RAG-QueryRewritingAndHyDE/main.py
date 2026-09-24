@@ -12,6 +12,7 @@ def main():
         #for doc in docs:
         #    print(doc)
         while True:
+            print("--------------------------")
             inputQ =input("Enter your query [For stop enter exit] : ")
 
             if inputQ.lower() == "exit":
