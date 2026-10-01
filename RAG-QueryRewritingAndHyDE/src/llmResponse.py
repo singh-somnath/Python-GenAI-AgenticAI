@@ -56,17 +56,17 @@ def getMessageAndHistory(currentSessionStore):
          raise e
       
 
-def askLLM(userQuery:str, session_id : str):
+def askLLM(userQuery:str,context:list[str], session_id : str):
     try:
         currentSessionStore = getSessionStore(session_id)
         message_history = getMessageAndHistory(currentSessionStore)
-        currentContext = getReteriever().invoke(userQuery)
+        currentContext = "\n".join(context)
         
         ragChain = (
                 {
                     "memory": lambda _: message_history["messages"],
                     "history": lambda _: message_history["summary"],
-                    "context": lambda _: "",
+                    "context": lambda _: currentContext,
                     "query": RunnablePassthrough()
                 }
                 | prompt
