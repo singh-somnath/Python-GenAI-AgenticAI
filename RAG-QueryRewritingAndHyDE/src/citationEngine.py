@@ -5,21 +5,25 @@ import numpy as np
 from scipy.special import softmax
 import re
 
-modelNLI = cross_encoder.CrossEncoder(model_name_or_path="cross-encoder/nli-MiniLM2-L6-H768",
-                           device="cpu")
+modelNLI = cross_encoder.CrossEncoder(
+            model_name_or_path="cross-encoder/nli-MiniLM2-L6-H768",
+            device="cpu"
+        )
 
-def citation(draftAnswer:str,originalDocs : list[Document]):
+def citation(userQuery:str,draftAnswer:str,originalDocs : list[Document]):
     try:
 
         nlp = spacy.load("en_core_web_sm")        
         doc = nlp(draftAnswer)
 
         claims = [s.text for s in list(doc.sents) if s.text.strip()]   
-        results=[]
+        citations=[]
+        unsupported = []
 
-        for claimID,claim in enumerate(claims):
+
+        for claimID,claim in enumerate(claims,start=1):
             
-            pairs =[(re.sub(r"\s+"," ",doc[0].page_content),claim) for doc in originalDocs]
+            pairs =[(re.sub(r"\s+"," ",doc.page_content),claim) for doc in originalDocs]
            
             scores = modelNLI.predict(pairs,batch_size=32, convert_to_numpy=True)
             
@@ -27,23 +31,39 @@ def citation(draftAnswer:str,originalDocs : list[Document]):
 
             # Entailment is index 1
             entailment_scores = probabilities[:, 1]
-            
+
             # Best supporting chunk
-            bestIndex = np.argmax(entailment_scores)
+            bestEntailmentIndex = np.argmax(entailment_scores)
 
-            bestScore = entailment_scores[bestIndex]
+            bbestEntailmentScore = probabilities[bestEntailmentIndex][1]
+            bestContradictionScore = probabilities[bestEntailmentIndex][0]
+            bestNeutralScore = probabilities[bestEntailmentIndex][2]
 
-            bestDoc = originalDocs[bestIndex]
+            if bbestEntailmentScore >= 0.75 and bbestEntailmentScore > bestContradictionScore:
+                bestDoc = originalDocs[bestEntailmentIndex]
 
-            results.append({
-                "claimID": claimID,
-                "claim": claim,
-                "chunkID": bestDoc[0].metadata["chunkID"],
-                "entailmentScore": float(bestScore),
-                "document": bestDoc[0].page_content
-            })
+                citations.append({
+                    "claimID": claimID,
+                    "claim": claim,
+                    "status":"supported",
+                    "chunkID": bestDoc.metadata["chunkID"],
+                    "entailmentScore": float(bbestEntailmentScore),
+                    "maxContradictionScore" : float(bestContradictionScore),
+                    "document": bestDoc
+                })
 
-        return results
+                print(f'[NLI] Chunk ID :{bestDoc.metadata["chunkID"]} | Status : Supported | Entailment Score : {float(bbestEntailmentScore)} | Contradict Score : {float(bestContradictionScore)} ')
+            else:
+                unsupported.append({
+                    "claimID": claimID,
+                    "claim": claim,
+                    "status":"unsupported",
+                    "entailmentScore": float(bbestEntailmentScore),
+                    "maxContradictionScore" : float(bestContradictionScore)
+                })
+                print(f'[NLI] Claim :{claim[:100]} | Status : Unsupported | Entailment Score : {float(bbestEntailmentScore)} | Contradict Score : {float(bestContradictionScore)} ')
+
+        return citations,unsupported
     except Exception as e:
         print(e)
         raise e

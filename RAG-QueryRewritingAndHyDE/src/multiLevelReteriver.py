@@ -74,7 +74,18 @@ def applyCroossEncoder(query:str, docs:list[Document]):
         reverse= True 
     )   
 
-    return distilation(query,[ doc for doc,_ in ranked[:5]])
+    filtered = [
+        (doc,score)
+        for doc,score in ranked
+        if score >=0
+    ]
+    print("MS-MARCO score + chunkID for the top 5")
+    for doc, score in filtered[:5]:
+         print(doc[0].metadata["chunkID"], score)
+
+    print("______________________________________====")
+
+    return distilation(query,[ doc for doc,_ in filtered[:5]])
 
     
 

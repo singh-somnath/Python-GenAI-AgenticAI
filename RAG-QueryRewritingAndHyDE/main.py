@@ -66,19 +66,32 @@ def main():
 
             #print("Response : ")
             draftAnser = askLLM(inputQ,contextDocs,"user-123")
-            citationResult = citation(str(draftAnser),distilDocs)
-            print("Response :")
-            print(draftAnser)
-            print("**************************************")
-            print(citationResult)
-            print("***************************************")
+           
+            if len(contextDocs) > 0:
+                citationResult,unsupportedResult = citation(inputQ,str(draftAnser),distilDocs)
+                supportedClaims = []
+                print("**************************************")
+                if len(citationResult) > 0 :
+                    print("citation")
+                    chunkIDList=[]
+                    for c in citationResult:
+                        if c["chunkID"] not in chunkIDList:
+                            supportedClaims.append(c)
+                            #print("CLAIM:", c["claimID"])
+                            #print("CLAIM:", c["claim"][:100] + "..." if len(c["claim"]) > 100 else c["claim"] )
+                            #print("STATUS", c["status"])
+                            #print("ENTAILMENT:", c["entailmentScore"])
+                            #print("CONTRADICTION:", c["maxContradictionScore"])
+                            #print("CHUNK:",c["chunkID"])
+                            #print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+                            chunkIDList.append(c["chunkID"])
 
-
-
-            
+                    print("\n\n".join([f'{s["document"].page_content} [Source : { s["chunkID"]} ]' for s in supportedClaims]))
+                else:
+                    print(draftAnser)
+            else:
+                print(draftAnser)
         
-               
-
         print("------------End--------------")
 
     except Exception as e:

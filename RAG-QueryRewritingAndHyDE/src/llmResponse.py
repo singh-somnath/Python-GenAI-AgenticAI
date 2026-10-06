@@ -15,12 +15,17 @@ basellm = ChatOpenAI(model="gpt-4o-mini",api_key=apiKEY)
 store = {}
 prompt = ChatPromptTemplate.from_messages([
                 ("system", """You are a RAG assistant.
-                    Answer the question ONLY using the provided context.
-                    If the answer is not present in the context, say:
-                    "I don't have enough information in the provided context.
-                    Do not use outside knowledge.
 
-                    Use the following memory to guide your responses:
+                    Answer the user's question using only the provided context.
+
+                    Rules:
+                    - Answer the question within the exact scope requested by the user.
+                    - Use the context only when it supports that requested scope.
+                    - Do not change, narrow, or broaden the user's requested scope based on the retrieved context.
+                    - Do not introduce a specific technology, framework, product, or implementation when the user did not ask for it.
+                    - If the context does not contain sufficient information for the requested scope, say that the information is not available in the provided context.
+
+                     Use the following memory to guide your responses:
                     {memory}"""),
                 ("human", """Chat History:
                     {history}
